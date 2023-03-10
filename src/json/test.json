@@ -1,0 +1,12 @@
+[
+	{ "id": "ginza", "ja": "銀座" },
+	{ "id": "higashiginza", "ja": "東銀座" },
+	{ "id": "yuurakuchou", "ja": "有楽町" },
+	{ "id": "shinbashi", "ja": "新橋" },
+	{ "id": "shiodome", "ja": "汐留" },
+	{ "id": "toranomon", "ja": "虎ノ門" },
+	{ "id": "tsukiji", "ja": "築地" },
+	{ "id": "tsukishima", "ja": "月島" },
+	{ "id": "marunouchi", "ja": "丸の内" },
+	{ "id": "nihonbashi", "ja": "日本橋" }
+]
