@@ -1,0 +1,20 @@
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>station_name</th>
+      <th>budget</th>
+      <th>genre</th>
+      <th>url</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>name</th>
+      <th>station_name</th>
+      <th>budget</th>
+      <th>genre</th>
+      <th>url</th>
+    </tr>
+  </tbody>
+</table>
