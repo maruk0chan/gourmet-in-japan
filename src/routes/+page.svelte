@@ -9,6 +9,7 @@
 	let gourmetData
 	let selectedAreaObject
 	let selectedAreaId
+	let selectedBudgetObject
 	let selectedBudgetId
 	console.log(
 		sampleList.results.shop.map(({ open, close }) => {
@@ -62,7 +63,7 @@
 <h1>Welcome to Gourmet in Japan</h1>
 <p>Select some conditions to filter out the restaurants you are looking for 😉</p>
 <button on:click={makeQuery}>Search</button>
-<div>
+<div class="condition">
 	<label for="area">Choose areas (<b><u>ONLY the FIRST 5</u></b> selections will be applied and you can also <b><u>DRAG</u></b> to change the orders):</label>
 	<AutoComplete
 		multiple="true"
@@ -77,13 +78,10 @@
 		keywordsFunction={(area) => area.ja + ' ' + area.en + ' ' + area.hg + ' ' + area.kk}
 	/>
 </div>
-<div>
+<div class="condition">
 	<label for="budget">Budget</label>
-	<select id="budget-select" on:change={handleBudgetSelect}>
-		{#each budgetOptions as budgetOption}
-			<option value={budgetOption.code}>{budgetOption.name}</option>
-		{/each}
-	</select>
+
+	<AutoComplete multiple="true" readonly={true} items={budgetOptions} bind:selectedItem={selectedBudgetObject} bind:value={selectedBudgetId} labelFieldName="name" valueFieldName="code" />
 </div>
 <div>
 	<label for="count">Results per page</label>
@@ -95,11 +93,15 @@
 </div>
 
 {#if gourmetData}
-	<div>Total no. of results: {gourmetData.results.results_available}</div>
-	<div>No. of results shown: {gourmetData.results.results_returned}</div>
+	<div class="result-stat">
+		<div>Total no. of results: {gourmetData.results.results_available}</div>
+		<div>No. of results shown: {gourmetData.results.results_returned}</div>
+	</div>
 {:else}
-	<div>Total no. of results: 0</div>
-	<div>No. of results shown: 0</div>
+	<div class="result-stat">
+		<div>Total no. of results: 0</div>
+		<div>No. of results shown: 0</div>
+	</div>
 {/if}
 
 <table>
@@ -122,10 +124,11 @@
 		</tr>
 	</tbody>
 </table>
-<!-- {#if data}
-    {#each data as item}
-      <div>{item.name}</div>
-    {/each}
-  {:else}
-    <p>Loading data...</p>
-  {/if} -->
+
+<style lang="sass">
+.condition + .condition 
+	margin-top: 20px
+.result-stat
+	margin-top: 20px
+
+</style>
