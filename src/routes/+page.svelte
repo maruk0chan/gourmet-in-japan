@@ -1,4 +1,6 @@
 <script lang="ts">
+	export const prerender = true
+	
 	import ResultTable from '../ResultTable.svelte'
 	import areaList from '../json/small_area.json'
 	import queryMap from '../json/query_map.json'
