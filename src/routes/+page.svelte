@@ -50,13 +50,6 @@
 	const budgetOptions = queryMap.budget.options
 	const countOptions = queryMap.count.options
 
-	function handleBudgetSelect(event) {
-		selectedBudgetId = event.target.value
-	}
-	function handleCountSelect(event) {
-		selectedCount = event.target.value
-	}
-
 	const availableFilters = gourmetData
 </script>
 
@@ -64,10 +57,10 @@
 	<h1 class="heading">Welcome to Gourmet in Japan</h1>
 	<p>This is an web application to help you find the restaurants that meet your search condition. 😉</p>
 	<p>Select some conditions to filter out the restaurants you are looking for</p>
-	<div>For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can also <b><u>DRAG</u></b> to change the orders</div>
+	<div>*For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can also <b><u>DRAG</u></b> to change the orders</div>
 	<div class="filter-container">
 		<div class="filter">
-			<label for="area">Choose areas</label>
+			<label for="area">Choose areas*</label>
 			<AutoComplete
 				multiple="true"
 				delay="500"
@@ -82,7 +75,7 @@
 			/>
 		</div>
 		<div class="filter">
-			<label for="budget">Budget (¥)</label>
+			<label for="budget">Budget (¥)*</label>
 			<AutoComplete multiple="true" readonly={true} items={budgetOptions} bind:selectedItem={selectedBudgetObject} bind:value={selectedBudgetId} labelFieldName="name" valueFieldName="code" />
 		</div>
 		<div class="filter">
