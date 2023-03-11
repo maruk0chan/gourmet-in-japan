@@ -87,11 +87,7 @@
 		</div>
 		<div class="filter">
 			<label for="count">Results per page</label>
-			<select id="count-select" on:change={handleCountSelect}>
-				{#each countOptions as countOption}
-					<option value={countOption}>{countOption}</option>
-				{/each}
-			</select>
+			<AutoComplete items={countOptions} bind:selectedItem={selectedCount} />
 		</div>
 		<div class="submit-panel">
 			<button class="search-button" on:click={makeQuery}>Search</button>
@@ -101,6 +97,8 @@
 <ResultTable {gourmetData} {columns} {shopList} />
 
 <style lang="sass">
+	body
+		background-image: url('../fuji-bg.jpg')
 	.heading
 		text-align: center
 	.search-container
