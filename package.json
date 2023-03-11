@@ -10,8 +10,10 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test:unit": "vitest",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"format": "prettier --plugin-search-dir . --write .",
+		"deploy": "gh-pages -d dist -t true"
 	},
+	"homepage": "https://maruk0chan.github.io/gourmet-in-japan/",
 	"devDependencies": {
 		"@rollup/plugin-json": "^6.0.0",
 		"@rollup/plugin-replace": "^5.0.2",
@@ -35,6 +37,7 @@
 	},
 	"type": "module",
 	"dependencies": {
+		"@sveltejs/adapter-static": "^2.0.1",
 		"axios": "^1.3.4"
 	}
 }
