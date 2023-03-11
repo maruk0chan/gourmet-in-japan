@@ -115,7 +115,7 @@
 	"count": {
 		"id": "count",
 		"tag": "Count",
-		"options": [10, 20, 50]
+		"options": [10, 20, 50, 100]
 	},
 	"coupon_urls": {
 		"id": "coupon_urls",

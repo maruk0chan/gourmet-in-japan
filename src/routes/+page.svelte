@@ -1,6 +1,6 @@
 <script lang="ts">
 	export const prerender = true
-	
+
 	import ResultTable from '../ResultTable.svelte'
 	import areaList from '../json/small_area.json'
 	import queryMap from '../json/query_map.json'
@@ -14,6 +14,7 @@
 	let selectedBudgetObject
 	let selectedBudgetId
 	let selectedCount
+	let selectedCapacity
 	let shopList
 	const columns = ['station_name', 'genre', 'budget', 'open', 'close', 'capacity']
 
@@ -27,6 +28,7 @@
 		const keyParam = 'bfa93fda871977e1'
 		const formatParam = 'json'
 		const budgetParam = selectedBudgetId
+		const capacityParam = selectedCapacity
 		try {
 			const response = await axios.get(`
 			${baseUrl}/gourmet/v1/?
@@ -34,7 +36,8 @@
 			format=${formatParam}&
 			small_area=${smallAreaParams()}&
 			budget=${budgetParam}&
-			count=${selectedCount}npm 
+			count=${selectedCount}&
+			party_capacity=${selectedCapacity}&
 			`)
 
 			gourmetData = response.data
@@ -49,6 +52,10 @@
 		}
 	}
 
+	const handleCapacityInput = (e) => {
+		selectedCapacity = e.target.value
+	}
+
 	const budgetOptions = queryMap.budget.options
 	const countOptions = queryMap.count.options
 
@@ -57,12 +64,17 @@
 
 <div class="search-container">
 	<h1 class="heading">Welcome to Gourmet in Japan</h1>
-	<p>This is an web application to help you find the restaurants that meet your search condition. 😉</p>
+	<p>
+		This is an web application to help you find the restaurants that meet your search condition. 😉
+	</p>
 	<p>Select some conditions to filter out the restaurants you are looking for</p>
-	<div>*For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can also <b><u>DRAG</u></b> to change the orders</div>
+	<div>
+		*For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can
+		also <b><u>DRAG</u></b> to change the orders
+	</div>
 	<div class="filter-container">
 		<div class="filter">
-			<label for="area">Choose areas*</label>
+			<label for="area">Choose areas* (e.g. Ginza, Asakusa)</label>
 			<AutoComplete
 				multiple="true"
 				delay="500"
@@ -78,11 +90,27 @@
 		</div>
 		<div class="filter">
 			<label for="budget">Budget (¥)*</label>
-			<AutoComplete multiple="true" readonly={true} items={budgetOptions} bind:selectedItem={selectedBudgetObject} bind:value={selectedBudgetId} labelFieldName="name" valueFieldName="code" />
+			<AutoComplete
+				multiple="true"
+				readonly={true}
+				items={budgetOptions}
+				bind:selectedItem={selectedBudgetObject}
+				bind:value={selectedBudgetId}
+				labelFieldName="name"
+				valueFieldName="code"
+			/>
 		</div>
 		<div class="filter">
-			<label for="count">Results per page</label>
-			<AutoComplete items={countOptions} bind:selectedItem={selectedCount} />
+			<label for="count">Showing no. of results</label>
+			<AutoComplete readonly={true} items={countOptions} bind:selectedItem={selectedCount}>
+				<div slot="no-results">
+					Please choose from the list.
+				</div>
+			</AutoComplete>
+		</div>
+		<div class="filter">
+			<label for="capacity">Capacity</label>
+			<input class="capacity" type="number" on:input={handleCapacityInput} />
 		</div>
 		<div class="submit-panel">
 			<button class="search-button" on:click={makeQuery}>Search</button>
@@ -107,6 +135,8 @@
 			flex-direction: column
 			margin: 0 auto
 			max-width: 600px
+			.capacity
+				height: 2em
 		.filter + .filter 
 			margin-top: 20px
 	.submit-panel
