@@ -16,7 +16,7 @@
 	let selectedCount
 	let selectedCapacity
 	let shopList
-	const columns = ['station_name', 'genre', 'budget', 'open', 'close', 'capacity']
+	const columns = ['name_kana', 'station_name', 'genre', 'budget', 'open', 'close', 'capacity']
 	const jpAreaList = areaList.map((area) => area.ja)
 	const enAreaList = areaList.map((area) => area.en)
 	const handleCapacityInput = (e) => {
@@ -99,7 +99,7 @@
 			console.log(gourmetData.results)
 			shopList = gourmetData.results.shop.map(({ ...rest }) => {
 				const { budget, capacity } = rest
-				let { station_name, genre, open, close } = rest // need translation
+				let { name_kana, station_name, genre, open, close } = rest // need translation
 
 				// station name
 				const targetIndex = jpAreaList.indexOf(station_name)
@@ -114,8 +114,13 @@
 				// close
 				if (!!translateMap[close]) {
 					close = translateMap[close]
+				// } else {
+				// 	for (const [ja, en] of Object.entries(translateMap)) {
+				// 		const regex = new RegExp(ja, 'g')
+				// 		close = close.replace(regex, en)
+				// 	}
 				}
-				return { station_name, genre, budget, open, close, capacity }
+				return { name_kana, station_name, genre, budget, open, close, capacity }
 			})
 			console.log(copy)
 		} catch (error) {
@@ -169,7 +174,7 @@
 			</AutoComplete>
 		</div>
 		<div class="filter">
-			<label for="capacity">Party Capacity (not less than)</label>
+			<label for="capacity">Party Capacity (more than)</label>
 			<input class="capacity" type="number" on:input={handleCapacityInput} />
 		</div>
 		<div class="submit-panel">
