@@ -4,7 +4,7 @@
 	import ResultTable from '../ResultTable.svelte'
 	import areaList from '../json/small_area.json'
 	import queryMap from '../json/query_map.json'
-	import sampleList from '../json/sample_data.json'
+  import { onMount } from 'svelte';
 	import AutoComplete from 'simple-svelte-autocomplete'
 	import axios from 'axios'
 
@@ -54,8 +54,10 @@
 		'※年中無休': 'Open all year round',
 		年中無休: 'Open all year round',
 		無休: 'None',
+		不定休日あり: 'Not regular',
 		不定休: 'Not regular',
 		定休日なし: 'No regular holidays',
+		'土、日、祝日': 'Sat, Sun, P.H.',
 		無: 'None',
 		なし: 'None',
 		祝前日: 'the day before P.H.',
@@ -114,11 +116,11 @@
 				// close
 				if (!!translateMap[close]) {
 					close = translateMap[close]
-				// } else {
-				// 	for (const [ja, en] of Object.entries(translateMap)) {
-				// 		const regex = new RegExp(ja, 'g')
-				// 		close = close.replace(regex, en)
-				// 	}
+					// } else {
+					// 	for (const [ja, en] of Object.entries(translateMap)) {
+					// 		const regex = new RegExp(ja, 'g')
+					// 		close = close.replace(regex, en)
+					// 	}
 				}
 				return { name_kana, station_name, genre, budget, open, close, capacity }
 			})
@@ -127,6 +129,10 @@
 			console.error(error)
 		}
 	}
+
+	// window.onload = function(){
+	// 	console.log('loaded')
+	// }
 </script>
 
 <div class="search-container">
