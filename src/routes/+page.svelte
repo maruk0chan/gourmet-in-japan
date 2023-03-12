@@ -17,6 +17,61 @@
 	let selectedCapacity
 	let shopList
 	const columns = ['station_name', 'genre', 'budget', 'open', 'close', 'capacity']
+	const jpAreaList = areaList.map((area) => area.ja)
+	const enAreaList = areaList.map((area) => area.en)
+	const handleCapacityInput = (e) => {
+		selectedCapacity = e.target.value
+	}
+
+	const budgetOptions = queryMap.budget.options
+	const countOptions = queryMap.count.options
+
+	const availableFilters = gourmetData
+
+	const genreMap = {
+		居酒屋: 'Izakaya (Japanese style pub)',
+		'ダイニングバー・バル': 'Dining Bar / Bar',
+		創作料理: 'Creative Cuisine',
+		和食: 'Japanese Cuisine',
+		洋食: 'Western Cuisine',
+		'イタリアン・フレンチ': 'Italian/French',
+		中華: 'Chinese Cuisine',
+		'焼肉・ホルモン': 'Yakiniku/Hormone',
+		韓国料理: 'Korean Cuisine',
+		'アジア・エスニック料理': 'Asian/Ethnic Cuisine',
+		各国料理: 'International Cuisine',
+		'カラオケ・パーティ': 'Karaoke/Party',
+		'バー・カクテル': 'Bar/Cocktails',
+		ラーメン: 'Ramen',
+		'お好み焼き・もんじゃ': 'Okonomiyaki/Monja',
+		'カフェ・スイーツ': 'Cafes/Sweets',
+		その他グルメ: 'Other gourmet',
+	}
+
+	const translateMap = {
+		ビルに準ずる: 'Same as building',
+		年末年始: 'Year-end and New Year holidays',
+		'※年中無休': 'Open all year round',
+		年中無休: 'Open all year round',
+		無休: 'None',
+		不定休: 'Not regular',
+		定休日なし: 'No regular holidays',
+		無: 'None',
+		なし: 'None',
+		祝前日: 'the day before P.H.',
+		祝日: 'P.H.',
+		祝: 'P.H.',
+		月: 'Mon',
+		火: 'Tue',
+		水: 'Wed',
+		木: 'Thu',
+		金: 'Fri',
+		土: 'Sat',
+		日: 'Sun',
+		翌: 'Next',
+		料理: 'Meal',
+		ドリンク: 'Drink',
+	}
 
 	async function makeQuery() {
 		const maxSelections = 5
@@ -42,8 +97,24 @@
 
 			gourmetData = response.data
 			console.log(gourmetData.results)
-			shopList = gourmetData.results.shop.map(({ station_name, ...rest }) => {
-				const { genre, budget, open, close, capacity } = rest
+			shopList = gourmetData.results.shop.map(({ ...rest }) => {
+				const { budget, capacity } = rest
+				let { station_name, genre, open, close } = rest // need translation
+
+				// station name
+				const targetIndex = jpAreaList.indexOf(station_name)
+				station_name = `${enAreaList[targetIndex]}`
+				// genre
+				genre.name = genreMap[genre.name]
+				// opening time
+				for (const [ja, en] of Object.entries(translateMap)) {
+					const regex = new RegExp(ja, 'g')
+					open = open.replace(regex, en)
+				}
+				// close
+				if (!!translateMap[close]) {
+					close = translateMap[close]
+				}
 				return { station_name, genre, budget, open, close, capacity }
 			})
 			console.log(copy)
@@ -51,15 +122,6 @@
 			console.error(error)
 		}
 	}
-
-	const handleCapacityInput = (e) => {
-		selectedCapacity = e.target.value
-	}
-
-	const budgetOptions = queryMap.budget.options
-	const countOptions = queryMap.count.options
-
-	const availableFilters = gourmetData
 </script>
 
 <div class="search-container">
@@ -103,13 +165,11 @@
 		<div class="filter">
 			<label for="count">Showing no. of results</label>
 			<AutoComplete readonly={true} items={countOptions} bind:selectedItem={selectedCount}>
-				<div slot="no-results">
-					Please choose from the list.
-				</div>
+				<div slot="no-results">Please choose from the list.</div>
 			</AutoComplete>
 		</div>
 		<div class="filter">
-			<label for="capacity">Capacity</label>
+			<label for="capacity">Party Capacity (not less than)</label>
 			<input class="capacity" type="number" on:input={handleCapacityInput} />
 		</div>
 		<div class="submit-panel">
