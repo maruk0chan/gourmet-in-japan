@@ -4,17 +4,43 @@
 	import ResultTable from '../ResultTable.svelte'
 	import areaList from '../json/small_area.json'
 	import queryMap from '../json/query_map.json'
-  import { onMount } from 'svelte';
+	import { onMount } from 'svelte'
 	import AutoComplete from 'simple-svelte-autocomplete'
 	import axios from 'axios'
 
 	let gourmetData
-	let selectedAreaObject
-	let selectedAreaId
-	let selectedBudgetObject
-	let selectedBudgetId
-	let selectedCount
-	let selectedCapacity
+	let selectedAreaObject = [
+		{
+			id: 'X005',
+			ja: '銀座',
+			en: 'Ginza',
+			rm: 'Ginza',
+			hg: 'ぎんざ',
+			kk: 'ギンザ',
+		},
+		{
+			id: 'X025',
+			ja: '築地',
+			en: 'Tsukiji',
+			rm: 'Tsukiji',
+			hg: 'つきじ',
+			kk: 'ツキジ',
+		},
+	]
+	let selectedAreaId = 'testId'
+	let selectedBudgetObject = [
+		{
+			code: 'B004',
+			name: '5001～7000円',
+		},
+		{
+			code: 'B005',
+			name: '7001～10000円',
+		},
+	]
+	let selectedBudgetId = 'testId'
+	let selectedCount = '20'
+	let selectedCapacity = '50'
 	let shopList
 	const columns = ['name_kana', 'station_name', 'genre', 'budget', 'open', 'close', 'capacity']
 	const jpAreaList = areaList.map((area) => area.ja)
@@ -76,6 +102,7 @@
 	}
 
 	async function makeQuery() {
+		console.log(selectedAreaObject, selectedBudgetObject)
 		const maxSelections = 5
 		const smallAreaParams = () => {
 			const copy = [...selectedAreaId]
@@ -141,9 +168,16 @@
 		This is an web application to help you find the restaurants that meet your search condition. 😉
 	</p>
 	<p>Select some conditions to filter out the restaurants you are looking for</p>
-	<div>
-		*For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can
-		also <b><u>DRAG</u></b> to change the orders
+	<p>The following default example shows you if you wanna find:</p>
+	<div class="indentation">
+		<p>1. <b><u>Ginza</u></b> or <b><u>Tsukiji</u></b></p>
+		<p>2. Budget <b><u>¥5,001 - ¥10,000</u></b></p>
+		<p>3. Showing the first <b><u>20</u></b> results of total results</p>
+		<p>4. Restaurants that have party capacity over <b><u>50</u></b></p>
+		<p>
+			*For multiple selections, <b><u>ONLY the FIRST 5</u></b> selections will be applied and you can
+			also <b><u>DRAG</u></b> to change the orders
+		</p>
 	</div>
 	<div class="filter-container">
 		<div class="filter">
@@ -181,7 +215,12 @@
 		</div>
 		<div class="filter">
 			<label for="capacity">Party Capacity (more than)</label>
-			<input class="capacity" type="number" on:input={handleCapacityInput} />
+			<input
+				class="capacity"
+				type="number"
+				on:input={handleCapacityInput}
+				bind:value={selectedCapacity}
+			/>
 		</div>
 		<div class="submit-panel">
 			<button class="search-button" on:click={makeQuery}>Search</button>
@@ -195,6 +234,8 @@
 		background-image: url('../fuji-bg.jpg')
 	.heading
 		text-align: center
+	.indentation
+		padding-left: 20px
 	.search-container
 		max-width: 1000px
 		padding: 0 50px
